@@ -17,9 +17,7 @@ const setTodo = asyncHandler(async (req, res) => {
     if(!todo){
         res.status(400).json({ message: 'Please input value' })
     }
-
     const insertedTodo = await TodoModel.create({ todo: todo })
-
     res.status(200).json(insertedTodo)
 })
 
@@ -28,7 +26,6 @@ const setTodo = asyncHandler(async (req, res) => {
 //@acess PRIVATE
 const updateTodo = asyncHandler(async (req, res) => {
     const todos = await TodoModel.findById(req.params.id)
-
     if(!todos){
         res.status(400)
         throw new Error('Todo not found')
@@ -36,7 +33,6 @@ const updateTodo = asyncHandler(async (req, res) => {
     const updatedTodo = await TodoModel.findByIdAndUpdate(req.params.id, req.body, {
         new: true
     })
-
     res.status(200).json(updatedTodo)
 })
 
@@ -45,12 +41,10 @@ const updateTodo = asyncHandler(async (req, res) => {
 //@acess PRIVATE
 const removeTodo = asyncHandler(async (req, res) => {
     const todos = await TodoModel.findById(req.params.id)
-
     if(!todos){
         res.send(400)
         throw new Error('Todo not found')
     }
-
     await todos.remove()
     res.status(200).json({ id: req.params.id })
 })
