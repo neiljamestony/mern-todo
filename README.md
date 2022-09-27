@@ -1,0 +1,2 @@
+# mern-todo
+SIMPLE TODO LIST USING MERN STACK
