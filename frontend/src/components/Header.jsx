@@ -1,6 +1,6 @@
 import { Box, AppBar, Toolbar, Typography, Menu, MenuItem, ListItemIcon, ListItemText, IconButton } from '@mui/material'
 import { Login, Logout, AppRegistration, Settings } from '@mui/icons-material'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { NavButton } from './assets/StyledComponents'
 import { useNavigate, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -18,6 +18,10 @@ const Header = () => {
         dispatch(reset())
         navigate('/')
     }
+
+    useEffect(() => {
+        setAnchorEl(null)
+    },[user])
 
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -46,10 +50,10 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <Link to='/register'>
+                                <Link to='/register' style={{ textDecoration: 'none', color: '#fff' }}>
                                     <NavButton startIcon={<AppRegistration fontSize="small"/>}>Register</NavButton>
                                 </Link>
-                                <Link to='/login'>
+                                <Link to='/login' style={{ textDecoration: 'none', color: '#fff' }}>
                                     <NavButton onClick={() => navigate('/login')} startIcon={<Login fontSize="small"/>}>Login</NavButton>
                                 </Link>
                             </>

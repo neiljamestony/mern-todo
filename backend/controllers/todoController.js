@@ -32,11 +32,8 @@ const updateTodo = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Todo not found')
     }
-    // check user
-    const user = await UserModel.findById(req.user.id)
-
     // check if user data matches on current user
-    if(todos.user.toString() !== user.id) res.status(401).json({ message: 'User not Authorized' })
+    if(todos.user.toString() !== req.user.id) res.status(401).json({ message: 'User not Authorized' })
 
     const updatedTodo = await TodoModel.findByIdAndUpdate(req.params.id, req.body, {
         new: true
@@ -54,11 +51,8 @@ const removeTodo = asyncHandler(async (req, res) => {
         res.send(400).json({ message: 'Todo not found'})
     }
 
-    // check user
-    const user = await UserModel.findById(req.user.id)
-
     // check if user data matches on current user
-    if(todos.user.toString() !== user.id) res.status(401).json({ message: 'User not Authorized' })
+    if(todos.user.toString() !== req.user.id) res.status(401).json({ message: 'User not Authorized' })
 
     await todos.remove()
     res.status(200).json({ id: req.params.id })

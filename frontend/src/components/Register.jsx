@@ -20,6 +20,7 @@ const Register = () => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { user, isLoading, isSuccess, isError, message } = useSelector((state) => state.auth)
+	
 	const { name, email, password, password2 } = formData
 
 	useEffect(() => {
@@ -27,11 +28,10 @@ const Register = () => {
 			toast.error(message)
 		}
 		if(isSuccess || user) {
-			toast.success(`Welcome ${user.data.name.toUpperCase()}`)
 			navigate('/')
 		}
 		dispatch(reset())
-	},[user, isLoading, isSuccess, isError, message, navigate, dispatch])
+	},[user, isSuccess, isError, message, navigate, dispatch])
 	
 	const onChange = (event) => {
 		const name = event.currentTarget.name

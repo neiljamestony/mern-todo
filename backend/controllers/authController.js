@@ -29,12 +29,10 @@ const registerUser = asyncHandler(async (req, res) => {
     
         if(user){
             res.status(201).json({
-                data:{
-                    _id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    token: generateToken(user._id)
-                },
+                _id: user.id,
+                name: user.name,
+                email: user.email,
+                token: generateToken(user._id),
                 isSuccess: true,
                 status: 201
             })
@@ -59,21 +57,16 @@ const loginUser = asyncHandler(async (req, res) => {
             _id: user.id,
             name: user.name,
             email: user.email,
-            token: generateToken(user._id)
+            token: generateToken(user._id),
+            isSuccess: true,
+            status: 201
         })
     }else{
         res.status(400).json({ message: 'Invalid credentials'})
     }
 })
 
-const getUserInfo = asyncHandler(async (req, res) => {
-    const { _id, email, password } = await User.findById(req.user.id)
-    res.send({ 
-        id: _id,
-        email: email,
-        password: password
-     })
-})
+const getUserInfo = asyncHandler(async (req, res) => res.json(req.user))
 
 // Generate JWT
 

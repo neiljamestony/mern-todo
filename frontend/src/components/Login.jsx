@@ -1,40 +1,39 @@
 import { Box, Card, CardHeader, CardContent, Container, Grid, TextField, Button, CircularProgress, InputAdornment } from '@mui/material'
-import { useState, FC, ChangeEvent } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { Email, Password } from '@mui/icons-material'
-import axios from 'axios'
-import validator from 'validator'
+import { login, reset } from '../app/redux-reducer/authSlice'
+import { toast } from 'react-toastify'
+import Spinner from './reusables/Spinner'
 
-type FormData = {
-	email: string,
-	password: string | number
-}
-
-type Preloader = boolean
-type Validator = {
-	value: boolean,
-	msg: string
-}
-
-const Login: FC = () => {
-	const [formData, setFormData] = useState<FormData>(
+const Login = () => {
+	const [formData, setFormData] = useState(
 		{
 			email: '',
 			password: ''
 		}
 	)
-	const [loading, setLoading] = useState<Preloader>(false)
-	const [isValidEmail, setIsValidEmail] = useState<Preloader>(false)
-	const [isEmpty, setIsEmpty] = useState<Validator>({
-		value: false,
-		msg: ''
-	})
+	const [loading, setLoading] = useState(false)
+	const { email, password } = formData
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
+	const { user, isLoading, isSuccess, isError, message } = useSelector((state) => state.auth)
 
-	const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const name = event.currentTarget.name
-        const value = event.currentTarget.value
-		if(name === 'email' && !validator.isEmail(value)){
-			setIsValidEmail(false)
+	useEffect(() => {
+		if(isError){
+			toast.error(message)
 		}
+		if(isSuccess || user) {
+			navigate('/')
+		}
+		dispatch(reset())
+	},[user, isSuccess, isError, message, navigate, dispatch])
+
+	const onChange = (event) => {
+		const name = event.currentTarget.name
+		const value = event.currentTarget.value
+
 		setFormData((prevState) => ({
 			...prevState,
 			[name]: value
@@ -42,30 +41,15 @@ const Login: FC = () => {
 	}
 
 	const onSubmit = async () => {
-		// setLoading(!loading)
-		// // validate request
-		const { email, password } = formData
+		const userData = {
+			email,
+			password
+		}	
+		dispatch(login(userData))
+	}
 
-		if(!email || !password){
-			setIsEmpty({...isEmpty, value: true, msg: 'This field is required!'})
-			setLoading(false)
-		}else{
-			if(validator.isEmail(email)){
-				setIsValidEmail(true)
-				setIsEmpty({...isEmpty, value: false, msg: ''})
-				try{
-					const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/register`, {
-						body: formData
-					})
-					console.log(res)
-					return false
-					if(res) console.log(res.data)
-					setLoading(false)
-				}catch(error){
-					console.log(error)
-				}
-			}
-		}
+	if(isLoading){
+		return <Spinner/>
 	}
 
 	return (
@@ -79,8 +63,6 @@ const Login: FC = () => {
 								<TextField 
 								name="email" 
 								required 
-								error={isEmpty.value && (formData.email === '' || !isValidEmail)} 
-								helperText={isEmpty.value && ((formData.email === '' && isEmpty.msg) || (!isValidEmail && 'Invalid Email format!'))}
 								disabled={loading} 
 								variant="outlined" 
                                 InputProps={{
@@ -102,8 +84,6 @@ const Login: FC = () => {
 								<TextField 
                                     name="password" 
                                     required 
-                                    error={isEmpty.value && formData.password === ''} 
-                                    helperText={isEmpty.value && formData.password === '' && isEmpty.msg} 
                                     disabled={loading} 
                                     variant="outlined"
                                     InputProps={{
@@ -124,7 +104,7 @@ const Login: FC = () => {
 						</Grid>
 					</CardContent>
 					<CardContent>
-						<Button color="primary" variant="contained" disabled={loading && !isEmpty.value} onClick={onSubmit} sx={{ textTransform: 'none', fontFamily: 'Poppins' }}>{ loading ? <CircularProgress size={25} sx={{ color: '#fff' }}/> : 'Submit' }</Button>
+						<Button color="primary" variant="contained" disabled={loading} onClick={onSubmit} sx={{ textTransform: 'none', fontFamily: 'Poppins' }}>{ loading ? <CircularProgress size={25} sx={{ color: '#fff' }}/> : 'Submit' }</Button>
 					</CardContent>
 				</Card>
 			</Box>
