@@ -127,6 +127,7 @@ export const AddTodoInput = styled.input({
   border: "1px solid #7882A4",
   color: "#7882A4",
   flexGrow: 1,
+  backgroundColor: "#f0f2f5",
 });
 
 export const AddTodoButton = styled.button({
@@ -177,8 +178,8 @@ export const TodoItem = styled.div({
 });
 
 export const TodoIcon = styled.img({
-  height: 18,
-  width: 18,
+  height: 17,
+  width: 17,
 });
 
 export const NoDataIcon = styled.img({
@@ -219,4 +220,9 @@ export const NoDataTitle = styled.div({
   fontFamily: "Poppins",
   fontSize: 18,
   fontWeight: "bold",
+});
+
+export const CheckboxIcon = styled.img({
+  width: 17,
+  height: 17,
 });

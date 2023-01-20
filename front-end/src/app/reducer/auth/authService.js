@@ -1,5 +1,9 @@
 import axios from "axios";
-const API_URL = "http://localhost:3000/api/users";
+const env_var = import.meta.env;
+const API_URL =
+  env_var.VITE_APP_NODE_ENV === "development"
+    ? `${env_var.VITE_APP_LOCAL_HOST}/api/users`
+    : `${env_var.VITE_APP_PROD_HOST}/api/users`;
 
 const register = async (userData) => {
   const response = await axios.post(`${API_URL}/register`, userData);

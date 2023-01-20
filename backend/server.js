@@ -9,7 +9,10 @@ connectDB();
 const app = express();
 
 const config = {
-  origin: "http://127.0.0.1:5173",
+  origin:
+    process.env.NODE_ENV === "development"
+      ? process.env.LOCAL_HOST
+      : process.env.PROD_HOST,
   credential: true,
   optionSuccessStatus: 200,
 };
@@ -19,5 +22,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/users", require("./routes/UserRoutes"));
+app.use("/api/todos", require("./routes/todoRoutes"));
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
