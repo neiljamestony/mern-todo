@@ -1,9 +1,0 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-body {
-  margin: 0;
-  font-family: Poppins;
-  display: flex;
-  place-items: center;
-  min-height: 100vh;
-  background-color: #d1d1d1;
-}
