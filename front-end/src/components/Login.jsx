@@ -55,6 +55,7 @@ export default function Login() {
               ref={emailRef}
               placeholder="Email"
               maxLength={30}
+              required
             />
           </InputContainer>
           <InputContainer>
@@ -63,6 +64,7 @@ export default function Login() {
               ref={pwordRef}
               placeholder="Password"
               maxLength={20}
+              required
             />
           </InputContainer>
           <SubmitButtonContainer>
