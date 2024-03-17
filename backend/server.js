@@ -10,8 +10,6 @@ const app = express();
 
 const config = {
   origin: '*',
-  credential: true,
-  optionSuccessStatus: 200,
 };
 
 app.use(cors(config));
